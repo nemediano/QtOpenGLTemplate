@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/icons">
+        <file>icons/full-screen.png</file>
+        <file>icons/screen-shoot.png</file>
+        <file>icons/show-menu.png</file>
+    </qresource>
+</RCC>
