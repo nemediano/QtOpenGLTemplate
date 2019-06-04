@@ -1,11 +1,11 @@
 # QtOpenGLTemplate
-A template to develop OpenGL appliations using QT
+A template to develop OpenGL appliations using Qt
 
 This template is aimed to create an application that
 contains:
 
 * A app widget, with a sidebar, menu status bar and a
-  central widget inheriting from QtOpenGLWidget that can
+  central widget inheriting from QOpenGLWidget that can
   be used for rendering a scene.
 
 * An already made connection with a QOpenGLDebugLogger
@@ -21,8 +21,9 @@ contains:
   the rendering widget
 
 * Uses [GLM](http://glm.g-truc.net) for the mathematics code since its univerally adopted
+
 ** And includes conversion functions between GLM basic types and
-  equivalent Qt types, so you can use QtOpenGL helper functionality
+  equivalent Qt types, so you can use Qt-OpenGL helper functionality
 
 * A class to abstract a simple trackball camera.
 
