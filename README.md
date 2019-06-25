@@ -1,5 +1,5 @@
 # QtOpenGLTemplate
-A template to develop OpenGL appliations using Qt
+A template to develop OpenGL applications using Qt
 
 This template is aimed to create an application that
 contains:
