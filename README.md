@@ -22,8 +22,8 @@ contains:
 
 * Uses [GLM](http://glm.g-truc.net) for the mathematics code since its univerally adopted
 
-** And includes conversion functions between GLM basic types and
-  equivalent Qt types, so you can use Qt-OpenGL helper functionality
+  * And includes conversion functions between GLM basic types and
+    equivalent Qt types, so you can use Qt-OpenGL helper functionality
 
 * A class to abstract a simple trackball camera.
 

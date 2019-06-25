@@ -2,6 +2,10 @@
 #include <QApplication>
 #include "mainwindow.h"
 
+/*
+ * Very standard main function for a Qt program
+*/
+
 int main(int argc, char* argv[]) {
     QApplication application(argc, argv);
 

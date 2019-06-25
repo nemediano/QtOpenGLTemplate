@@ -37,11 +37,11 @@ HEADERS += \
     mainwindow.h
 
 INCLUDEPATH += \
-    ../glm \
-    ../assimp-4.1.0/include
+    $$PWD/../glm \
+    $$PWD/../assimp-v.5.0.0.rc1/include
 
 LIBS += \
-    -L"../assimp-4.1.0/lib" -lassimp
+    -L$$PWD/../assimp-v.5.0.0.rc1/lib/ -lassimp
 
 DISTFILES += \
     shaders/simplefrag.frag \

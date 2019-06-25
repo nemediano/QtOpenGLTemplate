@@ -5,19 +5,23 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-
+// Give default values for: the perspective projection parameters
+// the log level and the rich text is disabled
 BaseOGLWidget::BaseOGLWidget(QWidget *parent) : QOpenGLWidget(parent),
-    mRichText(false), mLogLevel(0), mFovY(60.0f), mNear(0.1f), mFar(1000.0f){
+    mRichText(false), mLogLevel(0), mFovY(60.0f), mNear(0.1f), mFar(1000.0f) {
 }
 
 BaseOGLWidget::~BaseOGLWidget() {
+    // If you have an active OpenGL debug error logger stop it
     stopLog();
+    // If you ever had a logger destroy it
     if (mLogger) {
         delete mLogger;
     }
 }
 
 void BaseOGLWidget::logLevel(int level) {
+    // Only two log levels so far
     if (level >= 0 && level <= 1) {
         mLogLevel = level;
     }
@@ -27,13 +31,18 @@ void BaseOGLWidget::richText(bool enable) {
     mRichText = enable;
 }
 
+/* We receive a message from the logger, we filter it (maybe it's a
+ * message not that important). If we decide to react, we emit a new
+ * signal, this time with a QString */
 void BaseOGLWidget::messageLogged(const QOpenGLDebugMessage& msg) {
+    // Define the log levels
     if (mLogLevel == 0) {
         if (
             msg.severity() == QOpenGLDebugMessage::HighSeverity ||
             msg.severity() == QOpenGLDebugMessage::MediumSeverity ||
             msg.severity() == QOpenGLDebugMessage::LowSeverity
             ) {
+            /* In case we want to print to the console */
             //qDebug().noquote() << formatMsg(msg);
             //qDebug().noquote() << msg.message();
             emit newMessage(formatMsg(msg));
@@ -45,7 +54,8 @@ void BaseOGLWidget::messageLogged(const QOpenGLDebugMessage& msg) {
     }
 
 }
-
+// Create an string from the actual \class QOpenGLDebugMessage object
+// by taking into account your rich text option
 QString BaseOGLWidget::formatMsg(const QOpenGLDebugMessage& msg) {
     QString info{""};
 
@@ -161,38 +171,43 @@ QString BaseOGLWidget::formatMsg(const QOpenGLDebugMessage& msg) {
     return info;
 }
 
+// If the logger was ever created, stop it
 void BaseOGLWidget::stopLog() {
     if (mLogger) {
         mLogger->stopLogging();
     }
 }
 
+// Create the logger and activate it (start logging)
 void BaseOGLWidget::startLog(int level) {
     mLogger = new QOpenGLDebugLogger(this);
     if (mLogger->initialize()) {
         connect(mLogger, SIGNAL(messageLogged(QOpenGLDebugMessage)),
-                    this,   SLOT(messageLogged(QOpenGLDebugMessage)));
+                   this,   SLOT(messageLogged(QOpenGLDebugMessage)));
         mLogger->startLogging();
     }
     logLevel(level);
 }
 
+// Get an string with all the relevant version information
+// Currently, your GLM version, your Qt version and your OpenGL version
+// (from your actual context).
+// Remember that even if your driver support certain version, you can
+// ask for an older one. Also you can ask for a core or compatibility profile
 QString BaseOGLWidget::versionInfo() {
-
-    QString glType;
-    QString glVersion;
-    QString glProfile;
-    QString glRenderer;
-    QString glVendor;
-    QString qtVersion = QT_VERSION_STR;
-
-    // Get Version Information
-    glType = (context()->isOpenGLES()) ? "OpenGL ES" : "OpenGL (Desktop)";
-    glVersion = reinterpret_cast<const char*>(glGetString(GL_VERSION));
-    glRenderer = reinterpret_cast<const char*>(glGetString(GL_RENDERER));
-    glVendor = reinterpret_cast<const char*>(glGetString(GL_VENDOR));
+    // Get libraries version
+    QString qtVersion{QT_VERSION_STR};
+    QString glmVersion = QString::number(GLM_VERSION / 1000) + "." +
+            QString::number(GLM_VERSION / 100) +
+            "." + QString::number(GLM_VERSION % 100 / 10) +
+            "." + QString::number(GLM_VERSION % 10);
+    // Get OpenGL version Information form the actual current context
+    QString glType{(context()->isOpenGLES()) ? "OpenGL ES" : "OpenGL (Desktop)"};
+    QString glVersion{reinterpret_cast<const char*>(glGetString(GL_VERSION))};
+    QString glRenderer{reinterpret_cast<const char*>(glGetString(GL_RENDERER))};
+    QString glVendor{reinterpret_cast<const char*>(glGetString(GL_VENDOR))};
     // Get Profile Information
-
+    QString glProfile;
     switch (context()->format().profile())	{
     case QSurfaceFormat::OpenGLContextProfile::CoreProfile:
         glProfile = "Core";
@@ -203,30 +218,32 @@ QString BaseOGLWidget::versionInfo() {
         break;
 
     case QSurfaceFormat::OpenGLContextProfile::NoProfile:
-    default:
+    //default:
         glProfile = "unspecified";
         break;
     }
-
+    // Construct the actual info string
     QString info;
     if (mRichText) {
         //info += "Using Qt version: <i>" + qtVersion + "</i><br>";
+        info += "Using GLM version: <i>" + glmVersion + "</i><br>";
         info += "GPU: <b>" + glRenderer + "</b><br>";
         info += "Using <i>" + glType + "</i> in <b>" + glProfile + " profile</b><br>";
         info += "Version: <b>" + glVersion + "</b><br>";
         info += "Driver provided by: <i>" + glVendor + "</i>";
     } else {
+        info += "Using GLM version: " + glmVersion + "\n";
         info += "Using Qt version: " + qtVersion + "\n";
         info += "GPU: " + glRenderer + "\n";
         info += "Using " + glType + " in " + glProfile + " profile\n";
         info += "Version: " + glVersion + "\n";
         info += "Driver provided by: " + glVendor + "\n";
     }
-
-
     return info;
 }
 
+// In order to use the track ball camera correctly we need to let him know when
+// and where a dragging event started
 void BaseOGLWidget::mousePressEvent(QMouseEvent* event) {
     if (event->button() == Qt::MouseButton::LeftButton) {
         mBall.startDrag(glm::vec2(event->localPos().x(), event->localPos().y()));
@@ -234,6 +251,8 @@ void BaseOGLWidget::mousePressEvent(QMouseEvent* event) {
     }
 }
 
+// In order to use the track ball correctly we need to let him know when
+// a dragging event finishes
 void BaseOGLWidget::mouseReleaseEvent(QMouseEvent* event) {
     if (event->button() == Qt::MouseButton::LeftButton) {
         mBall.endDrag();
@@ -241,22 +260,22 @@ void BaseOGLWidget::mouseReleaseEvent(QMouseEvent* event) {
     }
 }
 
+// We need to register when we are using (editing) the track ball camera's position
 void BaseOGLWidget::mouseMoveEvent(QMouseEvent* event) {
     mBall.drag(glm::vec2(event->localPos().x(), event->localPos().y()));
     event->accept();
 }
 
+// We use the wheel to zoom in/out by changing the camera's fovy (field of view along y axis)
 void BaseOGLWidget::wheelEvent(QWheelEvent* event) {
-    QPoint numDegrees = event->angleDelta() / 16;
+    QPoint numDegrees{event->angleDelta() / 16};
     mFovY += numDegrees.y();
     if (mFovY <= 10.0f) {
         mFovY = 10.0f;
     } else if (mFovY >= 170.0f) {
         mFovY = 170.0f;
     }
-
     mP = glm::perspective(glm::radians(mFovY), width() / float(height()), mNear, mFar);
-
     event->accept();
 }
 
@@ -264,6 +283,7 @@ const QVector3D toQt(const glm::vec3& v) {
     return QVector3D(v.x, v.y, v.z);
 }
 
+// Remember Qt and GLM are opposed in row or column order
 const QMatrix4x4 toQt(const glm::mat4& m) {
     return QMatrix4x4(glm::value_ptr(glm::transpose(m)));
 }
@@ -271,13 +291,13 @@ const QMatrix4x4 toQt(const glm::mat4& m) {
 const QVector4D toQt(const glm::vec4& v) {
     return QVector4D(v.x, v.y, v.z, v.w);
 }
-
+// Remember Qt and GLM are opposed in row or column order
 const QMatrix3x3 toQt(const glm::mat3& m) {
     return QMatrix3x3(glm::value_ptr(glm::transpose(m)));
 }
 
 const QQuaternion toQt(const glm::quat& q) {
-    return QQuaternion(q.x, q.y, q.z, q.w);
+    return QQuaternion(q.w, q.x, q.y, q.z);
 }
 
 const glm::vec3 toGLM(const QVector3D& v) {
@@ -287,7 +307,7 @@ const glm::vec3 toGLM(const QVector3D& v) {
 const glm::vec3 toGLM(const QColor& color) {
     return glm::vec3(color.redF(), color.greenF(), color.blueF());
 }
-
+// Remember Qt and GLM are opposed in row or column order
 const glm::mat4 toGLM(const QMatrix4x4& m) {
     return glm::transpose(glm::make_mat4(m.data()));
 }
@@ -295,7 +315,7 @@ const glm::mat4 toGLM(const QMatrix4x4& m) {
 const glm::vec4 toGLM(const QVector4D& v) {
     return glm::vec4(v.x(), v.y(), v.z(), v.w());
 }
-
+// Remember Qt and GLM are opposed in row or column order
 const glm::mat3 toGLM(const QMatrix3x3& m) {
     return glm::transpose(glm::make_mat3(m.data()));
 }
