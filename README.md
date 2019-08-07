@@ -1,24 +1,24 @@
 # QtOpenGLTemplate
-A template to develop OpenGL applications using Qt
 
-This template is aimed to create an application that
+A set of templates to develop OpenGL appliations using Qt
+
+![Widget](img/mainwindow2.png)
+
+![Window](img/modelLoaderInQt.png)
+
+These templates are aimed to create an application that
 contains:
-
-* A app widget, with a sidebar, menu status bar and a
-  central widget inheriting from QOpenGLWidget that can
-  be used for rendering a scene.
 
 * An already made connection with a QOpenGLDebugLogger
   that output OpenGL debug messages to console.
 
-* Functionality to query OpenGL and Qt Versions used.
+* Placeholder ask for a very specific OpenGL context and version
 
-* Placeholder to specify a very specific OpenGL context
+* Query OpenGL and Qt Versions actually used
 
-* Functionality to go into full-screen mode
+![Info](img/dialog.png)
 
-* Functionality to take screnshoots in png format from
-  the rendering widget
+* Take screnshoots in png format
 
 * Uses [GLM](http://glm.g-truc.net) for the mathematics code since its univerally adopted
 
@@ -27,17 +27,23 @@ contains:
 
 * A class to abstract a simple trackball camera.
 
-* A simple "Hello world" example, that renders simple tetrahedron
-
-The aim of this template is to have minimal code that let you focus
+The aim of the templates is to have minimal code that let you focus
 in the OpenGL rather than the Qt.
 
-Is perfect to start learning OpenGL using the [RedBook](http://www.opengl-redbook.com/) or the [OpenGL SuperBible](http://www.openglsuperbible.com/). Or by following any of the websites [OpenGL tutorial](http://www.opengl-tutorial.org/) and [Learn OpenGL](https://learnopengl.com/)
+They are perfect to start learning OpenGL using the [RedBook](http://www.opengl-redbook.com/) or the [OpenGL SuperBible](http://www.openglsuperbible.com/). Or by following any of the websites [OpenGL tutorial](http://www.opengl-tutorial.org/) and [Learn OpenGL](https://learnopengl.com/)
 
 If you follow any of the above, you can (and should) use this template instead of GLEW, glf, freeglut, etc. This template substitute a windows manager library and an OpenGL loader library.
-Since, Qt already have an image loader, you will only need a Mesh loader library like [Open Asset Importer](http://www.assimp.org/) in order to fullfill your graphics needs.
+Since Qt already has an image loader, you will only need a mesh loader library like [Open Asset Importer](http://www.assimp.org/) in order to fullfill your graphics needs.
 
 ## Usage
 
-You need to have a working installation of Qt. Ideally, one that includes QtCreator. In that case you need to clone (or extract) the MyGLWidget folder inside of your Qt workspace and then
-fullfill the rest of the requisites which are easy to deduct from the [Qt pro file](MyGLWidget/MyGLWidget.pro)
+For using any of these templates you need to have a working installation of Qt.
+Ideally, one that includes QtCreator. You will also need to have GLM and in case
+you want to use the model loader [assimp](http://www.assimp.org/)
+
+The recomended way to use them, is to place the GLM and assimp in your QtWorkspace folder
+this way you can easily share them between projects.
+
+![Workspace](img/files.png)
+
+You can see the details to configure the build for each teamplate in their respective `*.pro` files.

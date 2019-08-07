@@ -1,6 +1,6 @@
 #-------------------------------------------------
 #
-# Project created by QtCreator 2018-05-30T17:23:59
+# Project created by QtCreator 2018-04-05T13:06:50
 #
 #-------------------------------------------------
 
@@ -8,7 +8,7 @@ QT       += core gui
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-TARGET = MyGLWidget
+TARGET = MyGLWindow
 TEMPLATE = app
 
 # The following define makes your compiler emit warnings if you use
@@ -25,30 +25,26 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
     main.cpp \
-    baseoglwidget.cpp \
-    testoglwidget.cpp \
+    meshload.cpp \
+    mesh.cpp \
     trackball.cpp \
-    mainwindow.cpp
+    baseGLwindow.cpp \
+    model.cpp
 
 HEADERS += \
-    baseoglwidget.h \
-    testoglwidget.h \
+    meshload.h \
+    baseGLwindow.h \
+    mesh.h \
     trackball.h \
-    mainwindow.h
-
-# Assimp it's not required to use this template. However, you can use the commented lines
-# as examples of how to include and link exernal libraries to use them in the porject.
-
-INCLUDEPATH += \
-#    $$PWD/../assimp-v.5.0.0.rc1/include \
-    $$PWD/../glm
-
-#LIBS += \
-#    -L$$PWD/../assimp-v.5.0.0.rc1/lib/ -lassimp
+    model.h
 
 DISTFILES += \
-    shaders/simplefrag.frag \
-    shaders/simplevert.vert
+    shaders/phongTexture.frag \
+    shaders/texturedVertex.vert
 
-RESOURCES += \
-    imageresources.qrc
+INCLUDEPATH += \
+    $$PWD/../glm \
+    $$PWD/../assimp-v.5.0.0.rc1/include
+
+LIBS += \
+    -L$$PWD/../assimp-v.5.0.0.rc1/lib/ -lassimp
