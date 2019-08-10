@@ -27,7 +27,7 @@ Trackball::Trackball(const glm::ivec2& windowSize, float radius) : Trackball() {
 }
 
 // Second Full Constructor. Initial window size and curve scale
-Trackball::Trackball(int width, int height, float radius) {
+Trackball::Trackball(int width, int height, float radius) : Trackball() {
     setWindowSize(glm::ivec2(width, height));
     m_radius = glm::clamp(radius, 0.1f, 1.0f);
 }
