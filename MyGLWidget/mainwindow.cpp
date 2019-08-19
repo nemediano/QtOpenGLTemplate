@@ -47,11 +47,9 @@ void MainWindow::takeScreenShoot() {
 // Toggle between full screen and normal mode
 void MainWindow::toogleFullScreen() {
     if (this->isFullScreen()) { // Go to normal mode
-        // First the side menu and the menu bar should be shown
+        this->showNormal();
         mSideMenuPtr->show();
         this->menuBar()->show();
-        // then, the main window goes to normal mode
-        this->showNormal();
     } else { // Go to full screen mode
         // First hide the elements except for the OpenGL widget
         mSideMenuPtr->hide();
@@ -80,6 +78,7 @@ void MainWindow::createActions() {
     fullAct->setStatusTip(tr("Go to full screen mode"));
     // Connect it to a function
     connect(fullAct, &QAction::triggered, this, &MainWindow::toogleFullScreen);
+    connect(mViewerPtr, SIGNAL(toggleFullScreen), this, SLOT(toogleFullScreen));
     actionsMenu->addAction(fullAct);
 
     // Create take screen-shoot action and add to menu
@@ -159,6 +158,16 @@ void MainWindow::keyPressEvent(QKeyEvent* event) {
         case Qt::Key_Escape:
             event->accept();
             this->close();
+        break;
+
+        case Qt::Key_F11:
+            event->accept();
+            this->toogleFullScreen();
+        break;
+
+        case Qt::Key_S:
+            event->accept();
+            this->takeScreenShoot();
         break;
 
         default:

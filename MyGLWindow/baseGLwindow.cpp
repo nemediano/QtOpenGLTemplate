@@ -289,6 +289,16 @@ void BaseGLWindow::keyPressEvent(QKeyEvent* event) {
         }
         break;
 
+        case Qt::Key_F11:
+        {
+            if (windowState() != Qt::WindowFullScreen) {
+                showFullScreen();
+            } else {
+                showNormal();
+            }
+        }
+        break;
+
         default:
             //You did not handle it pass to parent
             QOpenGLWindow::keyPressEvent(event);
