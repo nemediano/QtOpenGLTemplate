@@ -76,7 +76,7 @@ void MeshLoad::initTexture()  {
 
 void MeshLoad::resizeGL(int width, int height) {
     const qreal retinaScale = devicePixelRatio();
-    glViewport(0, 0, width * retinaScale, height * retinaScale);
+    glViewport(0, 0, int(width * retinaScale), int(height * retinaScale));
     float aspectRatio = float(width) / float(height);
     mP = perspective(radians(mFovY), aspectRatio, mNear, mFar);
     mBall.setWindowSize(width, height);
@@ -92,12 +92,12 @@ void MeshLoad::initializeGL() {
     initTexture();
     //Prepare the OpenGL shader program
     mGLProgPtr = new QOpenGLShaderProgram(this);
-    mGLProgPtr->addShaderFromSourceFile(QOpenGLShader::Vertex, "../HierMesh/shaders/texturedVertex.vert");
-    mGLProgPtr->addShaderFromSourceFile(QOpenGLShader::Fragment, "../HierMesh/shaders/phongTexture.frag");
+    mGLProgPtr->addShaderFromSourceFile(QOpenGLShader::Vertex, "../MyGLWindow/shaders/texturedVertex.vert");
+    mGLProgPtr->addShaderFromSourceFile(QOpenGLShader::Fragment, "../MyGLWindow/shaders/phongTexture.frag");
     mGLProgPtr->link();
-    GLuint posAttr = mGLProgPtr->attributeLocation("posAttr");
-    GLuint normAttr = mGLProgPtr->attributeLocation("normalAttr");
-    GLuint textAttr = mGLProgPtr->attributeLocation("textCoordAttr");
+    int posAttr = mGLProgPtr->attributeLocation("posAttr");
+    int normAttr = mGLProgPtr->attributeLocation("normalAttr");
+    int textAttr = mGLProgPtr->attributeLocation("textCoordAttr");
     // Transfer data form CPU to GPU and prepare the inuts for the Graphics pipeline
     {
         mGLProgPtr->bind();
@@ -110,13 +110,13 @@ void MeshLoad::initializeGL() {
         mVertexBuffer.create();
         mVertexBuffer.bind();
         mVertexBuffer.setUsagePattern(QOpenGLBuffer::StaticDraw);
-        mVertexBuffer.allocate(mVertices.constData(), mVertices.size() * sizeof(Vertex));
+        mVertexBuffer.allocate(mVertices.constData(), mVertices.size() * int(sizeof(Vertex)));
         //Another one for the indices
         mIndexBuffer = QOpenGLBuffer(QOpenGLBuffer::IndexBuffer);
         mIndexBuffer.create();
         mIndexBuffer.bind();
         mIndexBuffer.setUsagePattern(QOpenGLBuffer::StaticDraw);
-        mIndexBuffer.allocate(mIndexes.constData(), mIndexes.size() * sizeof(unsigned int));
+        mIndexBuffer.allocate(mIndexes.constData(), mIndexes.size() * int(sizeof(unsigned int)));
         //Feed up vertex atribute to the Shader program
         mGLProgPtr->enableAttributeArray(posAttr);
         mGLProgPtr->enableAttributeArray(normAttr);
@@ -170,7 +170,7 @@ void MeshLoad::paintGL() {
     mM = mat4(1.0f);
     if (mRotating) {
         // Approx 90 degress per second rotation
-        float angle = 90.0f * mFrame / screen()->refreshRate();
+        float angle = 90.0f * mFrame / float(screen()->refreshRate());
         vec3 axis = vec3(0.0f, 1.0f, 0.0f);
         mM = rotate(mM, radians(angle), axis);
     }
@@ -192,7 +192,9 @@ void MeshLoad::paintGL() {
             //Bind the texture pointer as texture unit 0
             mTextPtr[sep.specIndex]->bind(0);
             mGLProgPtr->setUniformValue("uColorMap", 0);
-            glDrawElementsBaseVertex(GL_TRIANGLES, sep.howMany, GL_UNSIGNED_INT, (void*)(sep.startIndex * sizeof(unsigned int)), sep.startVertex);
+            glDrawElementsBaseVertex(GL_TRIANGLES, sep.howMany, GL_UNSIGNED_INT,
+                                     reinterpret_cast<void*>(sep.startIndex * int(sizeof(unsigned int))),
+                                     sep.startVertex);
             mTextPtr[sep.specIndex]->release();
         }
     }
