@@ -74,7 +74,7 @@ struct TextureImage {
 class Model : public Mesh {
 
 protected:
-    std::vector<TextureImage> mDiffuseText;
+    std::vector<TextureImage> mTexturesData;
     void processNode(aiNode* node, const aiScene* scene);
     void addMeshData(const aiMesh* mesh, const aiScene* scene);
     int addTexture(const aiMaterial* material);

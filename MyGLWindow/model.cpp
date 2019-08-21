@@ -70,22 +70,22 @@ void Model::addMeshData(const aiMesh* mesh, const aiScene* scene) {
     unsigned int numFaces = mesh->mNumFaces;
     //I believe that I need to calculate an offset
     //unsigned int offset = mVertices.size();
-    unsigned int indicesBefore = mIndices.size();
+    unsigned int indicesBefore = static_cast<unsigned int>(mIndices.size());
     for (unsigned int t = 0; t < numFaces; ++t) {
         const aiFace* face = &mesh->mFaces[t];
         for (unsigned int i = 0; i < face->mNumIndices; ++i) {
             mIndices.push_back(face->mIndices[i]);
         }
     }
-    unsigned int indicesAfter = mIndices.size();
-    bookMark.startIndex = indicesBefore;
-    bookMark.howMany = indicesAfter - indicesBefore;
+    unsigned int indicesAfter = static_cast<unsigned int>(mIndices.size());
+    bookMark.startIndex = int(indicesBefore);
+    bookMark.howMany = int(indicesAfter - indicesBefore);
 
     /* Now, the Vertices */
     Vertex v;
     mHasNormals = mesh->HasNormals();
     mHasTexture = mesh->HasTextureCoords(0);
-    bookMark.startVertex = mVertices.size();
+    bookMark.startVertex = int(mVertices.size());
     for (unsigned int i = 0; i < mesh->mNumVertices; ++i) {
 
         v.position.x = mesh->mVertices[i].x;
@@ -132,9 +132,9 @@ int Model::addTexture(const aiMaterial* mat) {
     }
 
     //Check if this texture is already in the vector
-    for (size_t i = 0; i < mDiffuseText.size(); ++i) {
-        if (mDiffuseText[i].filePath == textPath) {
-            return i;
+    for (size_t i = 0; i < mTexturesData.size(); ++i) {
+        if (mTexturesData[i].filePath == textPath) {
+            return int(i);
         }
     }
 
@@ -142,10 +142,10 @@ int Model::addTexture(const aiMaterial* mat) {
     TextureImage text;
     text.type = SPECULAR;
     text.filePath = textPath;
-    mDiffuseText.push_back(text);
-    return static_cast<int>(mDiffuseText.size() - 1);
+    mTexturesData.push_back(text);
+    return static_cast<int>(mTexturesData.size() - 1);
 }
 
 std::vector<TextureImage> Model::getDiffuseTextures() const {
-    return mDiffuseText;
+    return mTexturesData;
 }

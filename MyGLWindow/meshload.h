@@ -14,7 +14,7 @@ class MeshLoad : public BaseGLWindow
 {
 public:
     MeshLoad();
-    ~MeshLoad();
+    ~MeshLoad() override;
 
 protected:
     void initializeGL() override;

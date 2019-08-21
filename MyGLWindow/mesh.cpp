@@ -129,13 +129,13 @@ bool Mesh::loadFromTriangles(const std::vector<Triangle>& triangles) {
         //apart are consider the same vertex
         const float EPSILON = 0.00000001f;  // sqrt(EPSILON) = 0.0001
         //check equality
-        if (glm::length2(a-b) < EPSILON) {
+        if (glm::length2(a - b) < EPSILON) {
             return false;
         }
         //Lexicographical order
-        if (a.x != b.x) {
+        if (glm::abs(a.x - b.x) > EPSILON) {
             return a.x < b.x;
-        } else if (a.y != b.y) {
+        } else if (glm::abs(a.y - b.y) > EPSILON) {
             return a.y < b.y;
         } else {
             return a.z < b.z;
@@ -280,11 +280,11 @@ bool Mesh::save(const QString& fileName) const {
     meshPtr->mVertices = new aiVector3D[mVertices.size()];
     if (mHasNormals) {
         meshPtr->mNormals = new aiVector3D[mVertices.size()];
-        meshPtr->mNumVertices = mVertices.size();
+        meshPtr->mNumVertices = static_cast<unsigned int>(mVertices.size());
     }
     if (mHasTexture) {
         meshPtr->mTextureCoords[0] = new aiVector3D[mVertices.size()];
-        meshPtr->mNumUVComponents[0] = mVertices.size();
+        meshPtr->mNumUVComponents[0] = static_cast<unsigned int>(mVertices.size());
     }
     //Fill vertex data
     Vertex v;
@@ -301,7 +301,7 @@ bool Mesh::save(const QString& fileName) const {
 
     //Alocate space for face data (trinagular faces)
     meshPtr->mFaces = new aiFace[mIndices.size() / 3];
-    meshPtr->mNumFaces = mIndices.size() / 3;
+    meshPtr->mNumFaces = static_cast<unsigned int>(mIndices.size() / 3);
     //Fil face data
     for (size_t i = 0; i < mIndices.size(); i += 3) {
         aiFace& face = meshPtr->mFaces[i / 3];
