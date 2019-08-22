@@ -41,8 +41,7 @@ For using any of these templates you need to have a working installation of Qt.
 Ideally, one that includes QtCreator. You will also need to have GLM and in case
 you want to use the model loader [assimp](http://www.assimp.org/)
 
-The recomended way to use them, is to place the GLM and assimp in your QtWorkspace folder
-this way you can easily share them between projects.
+The recomended way to use them, is to place the GLM and assimp in your QtWorkspace (the on cloned from here) folder. This way you can easily share them between projects.
 
 ![Workspace](img/files.png)
 

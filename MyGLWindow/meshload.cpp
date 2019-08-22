@@ -98,7 +98,7 @@ void MeshLoad::initializeGL() {
     int posAttr = mGLProgPtr->attributeLocation("posAttr");
     int normAttr = mGLProgPtr->attributeLocation("normalAttr");
     int textAttr = mGLProgPtr->attributeLocation("textCoordAttr");
-    // Transfer data form CPU to GPU and prepare the inuts for the Graphics pipeline
+    // Transfer data from CPU to GPU and prepare the inputs for the Graphics pipeline
     {
         mGLProgPtr->bind();
         // Create Vertex Array Object (Remember this needs to be done BEFORE binding the vertex)
@@ -131,7 +131,7 @@ void MeshLoad::initializeGL() {
         mGLProgPtr->disableAttributeArray(normAttr);
         mGLProgPtr->disableAttributeArray(textAttr);
         mIndexBuffer.release();
-        mIndexBuffer.release();
+        mVertexBuffer.release();
         mGLProgPtr->release();
         //Once we have a copy in the GPU there is no need to keep a CPU copy (unless you want to)
         mIndexes.clear();
@@ -225,7 +225,7 @@ void MeshLoad::keyPressEvent(QKeyEvent* event) {
         break;
 
         default:
-            //You did not handle it pass to parent
+            //You did not handle it pass the event to parent
             BaseGLWindow::keyPressEvent(event);
         break;
     }

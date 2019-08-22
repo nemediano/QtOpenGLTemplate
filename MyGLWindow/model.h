@@ -15,7 +15,7 @@
 /*!
   This struct encapsulate all the data needed to draw an individual Mesh
   of a model. If a model is compose of n meshes, it will also contain a
-  vector of n ModelData elements where each one can be used as a helper
+  vector of n MeshData elements where each one can be used as a helper
   to render an specific Mesh.
 */
 typedef struct MeshData {
@@ -99,7 +99,7 @@ public:
     /*!
       Get the filenames of each of the Diffuse textures in this model.
       If a mesh in the model does not contain a diffuse texture an empthy
-      string is placed. So the vectorl always contain as many elements as mesh
+      string is placed. So the vector always contain as many elements as mesh
       are in the model
     */
     std::vector<TextureImage> getDiffuseTextures() const;
