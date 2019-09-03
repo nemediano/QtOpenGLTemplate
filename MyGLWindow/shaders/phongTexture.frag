@@ -1,6 +1,7 @@
 #version 450
 layout(location = 3) uniform float uAlpha;
-layout(location = 4) uniform sampler2D uColorMap;
+layout(location = 4) uniform sampler2D uDiffuseMap;
+layout(location = 5) uniform sampler2D uSpecularMap;
 
 in vec3 fNormal;
 in vec2 fTextCoord;
@@ -15,9 +16,9 @@ void main(void) {
     vec3 r = normalize(reflect(-l, n));
     vec3 h = normalize(l + v);
     //Material from texture
-    vec3 Ka = 0.1 * texture2D(uColorMap, fTextCoord).rgb;
-    vec3 Ks = 0.9 * texture2D(uColorMap, fTextCoord).rgb;
-    vec3 Kd = vec3(0.85); //Use always light gray to the specular bright
+    vec3 Ka = 0.1 * texture2D(uDiffuseMap, fTextCoord).rgb;
+    vec3 Ks = 0.9 * texture2D(uDiffuseMap, fTextCoord).rgb;
+    vec3 Kd = texture2D(uSpecularMap, fTextCoord).rgb;
     float alpha = uAlpha;
     //Light's color (all components are white)
     vec3 La = vec3(1.0);

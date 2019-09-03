@@ -16,7 +16,7 @@ using glm::radians;
 
 MeshLoad::MeshLoad() : mNanoseconds(0), mGLProgPtr(nullptr), mFrame(0) {
     richText(false);
-    mAlpha = 40.0f;
+    mAlpha = 8.0f;
     mRotating = false;
     mModelFolder = "../models/Nyra/";
 }
@@ -57,7 +57,7 @@ void MeshLoad::createGeometry() {
     mIndexes = QVector<unsigned int>::fromStdVector(model.getIndices());
     mVertices = QVector<Vertex>::fromStdVector(model.getVertices());
     //Since we use the model to get the paths for the textures, I need to do this here
-    for (auto t : model.getDiffuseTextures()) {
+    for (auto t : model.getTextures()) {
         QFileInfo file = QString::fromStdString(t.filePath);
         mTextNames.push_back(mModelFolder + file.fileName());
     }
@@ -184,14 +184,17 @@ void MeshLoad::paintGL() {
     {
         for (int i = 0; i < mSeparators.size(); ++i) {
             MeshData sep = mSeparators[i];
-            if (sep.specIndex == -1) {
+            if (sep.specIndex == -1 || sep.diffuseIndex == -1) {
                 //This mesh does not have specular texture
                 //Do not render (Not with this shader at least)
                 continue;
             }
             //Bind the texture pointer as texture unit 0
-            mTextPtr[sep.specIndex]->bind(0);
-            mGLProgPtr->setUniformValue("uColorMap", 0);
+            mTextPtr[sep.diffuseIndex]->bind(0);
+            mGLProgPtr->setUniformValue("uDiffuseMap", 0);
+            //Bind the texture pointer as texture unit 0
+            mTextPtr[sep.specIndex]->bind(1);
+            mGLProgPtr->setUniformValue("uSpecularMap", 1);
             glDrawElementsBaseVertex(GL_TRIANGLES, sep.howMany, GL_UNSIGNED_INT,
                                      reinterpret_cast<void*>(sep.startIndex * int(sizeof(unsigned int))),
                                      sep.startVertex);

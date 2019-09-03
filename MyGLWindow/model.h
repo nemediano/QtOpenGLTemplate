@@ -29,10 +29,15 @@ typedef struct MeshData {
     */
     GLsizei howMany;
     //! Index of the specular texture
-    /*! The index of this mesh specular texture in the specular textures vector
-     * or -1 if this mesh does not have a Diffuse texture
+    /*! The index of this mesh specular texture in the textures vector
+     * or -1 if this mesh does not have a specular texture
     */
     int specIndex;
+    //! Index of the diffuse texture
+    /*! The index of this mesh diffuse texture in the textures vector
+     * or -1 if this mesh does not have a diffuse texture
+    */
+    int diffuseIndex;
 } MeshData;
 
 enum TextType {DIFFUSE, SPECULAR, NORMALS, OTHER};
@@ -77,7 +82,8 @@ protected:
     std::vector<TextureImage> mTexturesData;
     void processNode(aiNode* node, const aiScene* scene);
     void addMeshData(const aiMesh* mesh, const aiScene* scene);
-    int addTexture(const aiMaterial* material);
+    int addDiffuseTexture(const aiMaterial* material);
+    int addSpecularTexture(const aiMaterial* material);
     std::vector<MeshData> mSeparators;
 
 public:
@@ -95,14 +101,14 @@ public:
       glDrawElementsBaseVertex.
     */
     std::vector<MeshData> getSeparators() const;
-    //! Get the filenames of each of the Diffuse textures in this model.
+    //! Get the filenames of each of the textures in this model.
     /*!
-      Get the filenames of each of the Diffuse textures in this model.
-      If a mesh in the model does not contain a diffuse texture an empthy
+      Get the filenames of each of the textures in this model.
+      If a mesh in the model does not contain a certain texture an empthy
       string is placed. So the vector always contain as many elements as mesh
       are in the model
     */
-    std::vector<TextureImage> getDiffuseTextures() const;
+    std::vector<TextureImage> getTextures() const;
     //! Get the number of meshes in this Model.
     int numMeshes();
 };
