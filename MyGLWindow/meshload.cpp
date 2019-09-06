@@ -213,12 +213,12 @@ void MeshLoad::paintGL() {
 void MeshLoad::keyPressEvent(QKeyEvent* event) {
     switch(event->key()) {
         case Qt::Key_Left:
-            mAlpha = glm::clamp(mAlpha - 0.5f, 0.0f, 80.0f);
+            mAlpha = glm::clamp(mAlpha - 0.5f, 0.0f, 16.0f);
             event->accept();
         break;
 
         case Qt::Key_Right:
-            mAlpha = glm::clamp(mAlpha + 0.5f, 0.0f, 80.0f);
+            mAlpha = glm::clamp(mAlpha + 0.5f, 0.0f, 16.0f);
             event->accept();
         break;
 
