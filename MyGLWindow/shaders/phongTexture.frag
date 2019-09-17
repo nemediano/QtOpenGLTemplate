@@ -11,11 +11,12 @@ out vec4 fragColor;
 
 void main(void) {
     //Since we are in view space: v = (0.0, 0.0, 0.0) - fPosition
-    vec3 v = -fPosition;
-    // This is a directional light in view space
-    vec3 l = normalize(vec3(0.0, 0.75, 1.0));
+    vec3 v = normalize(-fPosition);
+    // This is a directional light in view space (comes from behind
+    // of the camera focus and towards the object)
+    vec3 l = normalize(vec3(0.0, 0.0, 1.0));
     vec3 n = normalize(fNormal);
-    vec3 r = normalize(reflect(-l, n));
+    //vec3 r = normalize(reflect(-l, n));
     vec3 h = normalize(l + v);
     //Material from texture
     vec3 Ka = 0.1 * texture2D(uDiffuseMap, fTextCoord).rgb;

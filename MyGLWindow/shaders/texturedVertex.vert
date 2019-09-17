@@ -14,9 +14,8 @@ out vec2 fTextCoord;
 void main(void) {
     gl_Position = PVM * vec4(posAttr, 1.0);
     // The lighting calculations will be in veiw space.
-    //But this shader is independent, it just matter how the
-    // input NormalMat is recieved
+    fPosition = vec3(VM * vec4(posAttr, 1.0));
+    // NormalMat needs to be in view space too
     fNormal = vec3(NormalMat * vec4(normalAttr, 0.0));
     fTextCoord = textCoordAttr;
-    fPosition = vec3(VM * vec4(posAttr, 0.0));
 }
