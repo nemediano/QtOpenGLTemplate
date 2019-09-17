@@ -16,7 +16,7 @@ using glm::radians;
 
 MeshLoad::MeshLoad() : mNanoseconds(0), mGLProgPtr(nullptr), mFrame(0) {
     richText(false);
-    mAlpha = 8.0f;
+    mAlpha = 1.5f;
     mRotating = false;
     mModelFolder = "../models/Nyra/";
 }
@@ -177,6 +177,7 @@ void MeshLoad::paintGL() {
     mM = scale(mM, vec3(1.5f));
     //Pass uniform values to shaders
     mGLProgPtr->setUniformValue("PVM", toQt(mP * V * mM));
+    mGLProgPtr->setUniformValue("VM", toQt(V * mM));
     //Since we are working in view space in fragment shader
     mGLProgPtr->setUniformValue("NormalMat", toQt(glm::inverse(glm::transpose(V * mM))));
     mGLProgPtr->setUniformValue("uAlpha", mAlpha);

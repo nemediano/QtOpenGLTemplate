@@ -3,14 +3,16 @@ layout(location = 3) uniform float uAlpha;
 layout(location = 4) uniform sampler2D uDiffuseMap;
 layout(location = 5) uniform sampler2D uSpecularMap;
 
+in vec3 fPosition;
 in vec3 fNormal;
 in vec2 fTextCoord;
 
 out vec4 fragColor;
 
 void main(void) {
-    //Since we are in view space
-    vec3 v = vec3(0.0);
+    //Since we are in view space: v = (0.0, 0.0, 0.0) - fPosition
+    vec3 v = -fPosition;
+    // This is a directional light in view space
     vec3 l = normalize(vec3(0.0, 0.75, 1.0));
     vec3 n = normalize(fNormal);
     vec3 r = normalize(reflect(-l, n));
@@ -26,9 +28,9 @@ void main(void) {
     vec3 Ld = vec3(1.0);
     //Phong's shading
     vec3 ambient = Ka * La;
-    vec3 specular = Ks * Ls * max(0.0, dot(n, l));
+    vec3 diffuse = Kd * Ld * max(0.0, dot(n, l));
     //Well, technically it is Blin - Phong
-    vec3 diffuse = Kd * Ld * pow(max(0.0, dot(n, h)), alpha);
+    vec3 specular = Ks * Ls * pow(max(0.0, dot(n, h)), alpha);
     //Final color for this fragment
     fragColor = vec4(ambient + specular + diffuse, 1.0);
 }
