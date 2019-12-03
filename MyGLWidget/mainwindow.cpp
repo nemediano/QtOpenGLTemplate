@@ -78,7 +78,6 @@ void MainWindow::createActions() {
     fullAct->setStatusTip(tr("Go to full screen mode"));
     // Connect it to a function
     connect(fullAct, &QAction::triggered, this, &MainWindow::toogleFullScreen);
-    connect(mViewerPtr, SIGNAL(toggleFullScreen), this, SLOT(toogleFullScreen));
     actionsMenu->addAction(fullAct);
 
     // Create take screen-shoot action and add to menu
