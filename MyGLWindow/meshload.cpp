@@ -53,9 +53,12 @@ void MeshLoad::createGeometry() {
      * that consist of several Meshes and textures into memmory CPU*/
     Model model(mModelFolder + "Nyra_pose.obj");
     model.toUnitCube();
-    mSeparators = QVector<MeshData>::fromStdVector(model.getSeparators());
-    mIndexes = QVector<unsigned int>::fromStdVector(model.getIndices());
-    mVertices = QVector<Vertex>::fromStdVector(model.getVertices());
+    std::vector<MeshData> sep = model.getSeparators();
+    mSeparators = QVector<MeshData>(sep.begin(), sep.end());
+    std::vector<unsigned int> indices = model.getIndices();
+    mIndexes = QVector<unsigned int>(indices.begin(), indices.end());
+    std::vector<Vertex> vertices = model.getVertices();
+    mVertices = QVector<Vertex>(vertices.begin(), vertices.end());
     //Since we use the model to get the paths for the textures, I need to do this here
     for (auto t : model.getTextures()) {
         QFileInfo file = QString::fromStdString(t.filePath);
@@ -160,7 +163,7 @@ void MeshLoad::paintGL() {
     //Finish the previous time query
     glEndQuery(GL_TIME_ELAPSED);
     glGetQueryObjectui64v(mTimerQuery, GL_QUERY_RESULT, &mNanoseconds);
-
+    glEnable(GL_DEPTH_TEST);
     //Clear screen and start the show
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     mGLProgPtr->bind();
