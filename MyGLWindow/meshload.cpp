@@ -163,7 +163,6 @@ void MeshLoad::paintGL() {
     //Finish the previous time query
     glEndQuery(GL_TIME_ELAPSED);
     glGetQueryObjectui64v(mTimerQuery, GL_QUERY_RESULT, &mNanoseconds);
-    glEnable(GL_DEPTH_TEST);
     //Clear screen and start the show
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     mGLProgPtr->bind();

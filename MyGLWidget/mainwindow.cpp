@@ -7,6 +7,7 @@
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), mScrShts(0) {
     // This is the configuration for the OpenGL context
     QSurfaceFormat format;
+    format.setDepthBufferSize(24);
     format.setSamples(4);
     format.setProfile(QSurfaceFormat::CoreProfile);
     format.setVersion(4, 5);

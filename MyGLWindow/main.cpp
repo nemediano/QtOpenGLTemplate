@@ -12,6 +12,8 @@ int main(int argc, char* argv[]) {
     QGuiApplication app(argc, argv);
 
     QSurfaceFormat format;
+    // Without this call some modern computer actualy gave me a very small depth buffer
+    format.setDepthBufferSize(24);
     format.setSamples(4);
     format.setProfile(QSurfaceFormat::CoreProfile);
     format.setVersion(4, 5);
